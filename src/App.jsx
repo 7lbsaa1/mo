@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ArrowLeft, Trash2, Plus, Minus, Search, Check, Star } from 'lucide-react';
 
-// قاعدة بيانات موسعة ومثالية للملابس
+// قاعدة بيانات المنتجات الفخمة لمتجر 7LBSAA
 const ALL_PRODUCTS = [
   { id: 1, name: "Premium Cyber Hoodie", price: 89, category: "Hoodies", rating: 4.9, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500" },
   { id: 2, name: "Streetwear Cargo Pants", price: 75, category: "Pants", rating: 4.7, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500" },
@@ -18,14 +18,14 @@ export default function App() {
   const subtitleRef = useRef();
   const btnRef = useRef();
 
-  // إدارة الحالات (States)
+  // إدارة حالات السلة والبحث والفلاتر
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    // أنيميشن GSAP السينمائي عند تحميل الموقع أول مرة
+    // حركة دخول سينمائية احترافية عبر محرك GSAP
     const tl = gsap.timeline();
     tl.fromTo(titleRef.current, 
       { opacity: 0, y: 100, skewY: 7 }, 
@@ -43,7 +43,7 @@ export default function App() {
     );
   }, []);
 
-  // إضافة للملة
+  // إضافة منتج للسلة
   const addToCart = (product) => {
     const exist = cart.find(x => x.id === product.id);
     if (exist) {
@@ -53,7 +53,7 @@ export default function App() {
     }
   };
 
-  // تحديث الكميات
+  // التحكم بالكميات داخل السلة (زيادة / نقصان)
   const updateQty = (product, action) => {
     if (action === 'increase') {
       setCart(cart.map(x => x.id === product.id ? { ...product, qty: product.qty + 1 } : x));
@@ -66,6 +66,7 @@ export default function App() {
     }
   };
 
+  // مسح منتج نهائياً
   const removeFromCart = (product) => {
     setCart(cart.filter(x => x.id !== product.id));
   };
@@ -73,7 +74,7 @@ export default function App() {
   const totalItems = cart.reduce((a, c) => a + c.qty, 0);
   const totalPrice = cart.reduce((a, c) => a + c.price * c.qty, 0);
 
-  // تصفية المنتجات بذكاء
+  // تصفية المنتجات بناءً على البحث والتصنيف الحالي
   const filteredProducts = ALL_PRODUCTS.filter(product => {
     const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -83,13 +84,13 @@ export default function App() {
   return (
     <div dir="rtl" style={{ minHeight: '100vh', background: '#0b0b0b', color: '#fff', position: 'relative' }}>
       
-      {/* هيدر احترافي زجاجي مثبت (Blur Navbar) */}
+      {/* هيدر زجاجي مثبت بلمسة عصرية (Blur Navbar) */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 8%', position: 'fixed', width: '100%', top: 0, zIndex: 50, background: 'rgba(11, 11, 11, 0.75)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
         <h1 style={{ fontSize: '2.2rem', fontWeight: '900', letterSpacing: '3px', color: '#ff3e6c', margin: 0 }}>7LBSAA</h1>
         
-        {/* أيقونة السلة الديناميكية */}
+        {/* زر السلة التفاعلي */}
         <div onClick={() => setIsCartOpen(true)} style={{ position: 'relative', cursor: 'pointer', padding: '5px' }}>
-          <ShoppingBag size={26} color="#fff" style={{ transition: 'transform 0.3s ease' }} />
+          <ShoppingBag size={26} color="#fff" />
           {totalItems > 0 && (
             <motion.span 
               initial={{ scale: 0 }}
@@ -102,7 +103,7 @@ export default function App() {
         </div>
       </nav>
 
-      {/* قسم البطولة الفخم (Hero Section) */}
+      {/* قسم الواجهة الرئيسي (Hero Section) */}
       <section style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 8%', position: 'relative', overflow: 'hidden' }}>
         <div style={{ zIndex: 2, maxWidth: '700px', textAlign: 'right' }}>
           <h1 ref={titleRef} style={{ fontSize: '5rem', lineHeight: '1.15', fontWeight: '900', marginBottom: '1.5rem', letterSpacing: '-1px' }}>
@@ -110,7 +111,7 @@ export default function App() {
             <span style={{ color: 'transparent', WebkitTextStroke: '2px #fff' }}>الأزياء</span> هنا.
           </h1>
           <p ref={subtitleRef} style={{ fontSize: '1.25rem', color: '#aaa', marginBottom: '2.5rem', lineHeight: '1.8', fontWeight: '300' }}>
-            اكتشف تشكيلتنا الحصرية المصممة لتواكب صيحات الجيل الجديد البرمجية والعصرية. قطع فريدة تعبر عن هويتك الحقيقية.
+            اكتشف تشكيلتنا الحصرية المصممة لتواكب صيحات الجيل الجديد. قطع فريدة ومبتكرة تعبر عن أسلوبك الخاص وبأعلى دقة تصنيع.
           </p>
           <button ref={btnRef} onClick={() => document.getElementById('shop').scrollIntoView({ behavior: 'smooth' })} className="cta-btn" style={{ background: '#ff3e6c', color: '#fff', border: 'none', padding: '1.2rem 3rem', fontSize: '1.1rem', fontWeight: '700', borderRadius: '30px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 4px 15px rgba(255, 62, 108, 0.3)' }}>
             تصفح المتجر الآن <ArrowLeft size={20} />
@@ -118,28 +119,28 @@ export default function App() {
         </div>
       </section>
 
-      {/* لوحة التحكم والمتجر الرئيسي */}
+      {/* قسم المتجر الرئيسي وفلاتر التحكم */}
       <section id="shop" style={{ padding: '6rem 8%', background: '#0e0e0e', borderTop: '1px solid #161616' }}>
         
-        {/* الفلاتر والبحث */}
+        {/* شريط البحث والفئات */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '4rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
             <h2 style={{ fontSize: '2.6rem', fontWeight: '800', margin: 0 }}>مجموعتنا <span style={{ color: '#ff3e6c' }}>الجديدة</span></h2>
             
-            {/* خانة البحث الفاخرة */}
+            {/* صندوق البحث الذكي */}
             <div style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
               <input 
                 type="text" 
                 placeholder="ابحث عما يناسب أسلوبك..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ width: '100%', padding: '0.9rem 1.2rem', paddingRight: '2.8rem', borderRadius: '30px', background: '#161616', border: '1px solid #252525', color: '#fff', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.3s' }}
+                style={{ width: '100%', padding: '0.9rem 1.2rem', paddingRight: '2.8rem', borderRadius: '30px', background: '#161616', border: '1px solid #252525', color: '#fff', fontSize: '0.95rem', outline: 'none' }}
               />
               <Search size={18} color="#666" style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)' }} />
             </div>
           </div>
 
-          {/* أزرار التنقل بين التصنيفات */}
+          {/* أزرار اختيار التصنيفات */}
           <div style={{ display: 'flex', gap: '0.8rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
             {["All", "Hoodies", "Pants", "T-Shirts", "Jackets", "Accessories"].map((cat) => (
               <button
@@ -153,7 +154,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* شبكة عرض كروت المنتجات */}
+        {/* شبكة المنتجات الانسيابية المدعومة بالـ Layout Animation */}
         <motion.div layout style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
           <AnimatePresence mode="popLayout">
             {filteredProducts.map((product) => (
@@ -167,7 +168,7 @@ export default function App() {
                 style={{ background: '#161616', padding: '1.2rem', borderRadius: '20px', border: '1px solid #222', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
               >
                 <div>
-                  {/* حاوية الصورة والأنيميشن التابع لها */}
+                  {/* تأثير تكبير الصور الانسيابي عند التمرير بالـ Mouse */}
                   <div style={{ overflow: 'hidden', borderRadius: '14px', height: '350px', marginBottom: '1.2rem', position: 'relative' }}>
                     <motion.img 
                       src={product.img} 
@@ -176,22 +177,21 @@ export default function App() {
                       transition={{ duration: 0.4 }}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                     />
-                    {/* تقييم النجوم الصغير في زاوية الكارت لجودة بصرية أعلى */}
                     <div style={{ position: 'absolute', top: '12px', left: '12px', background: 'rgba(0,0,0,0.6)', padding: '4px 8px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '4px', backdropFilter: 'blur(4px)' }}>
                       <Star size={12} color="#ffb800" fill="#ffb800" />
                       <span style={{ fontSize: '0.75rem', fontWeight: '700' }}>{product.rating}</span>
                     </div>
                   </div>
                   
-                  <span style={{ fontSize: '0.8rem', color: '#ff3e6c', fontWeight: '700', uppercase: 'true' }}>{product.category}</span>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', margin: '0.4rem 0 1rem 0', letterSpacing: '-0.3px' }}>{product.name}</h3>
+                  <span style={{ fontSize: '0.8rem', color: '#ff3e6c', fontWeight: '700' }}>{product.category}</span>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', margin: '0.4rem 0 1rem 0' }}>{product.name}</h3>
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #222', paddingTop: '1rem', marginTop: '0.5rem' }}>
                   <p style={{ color: '#fff', fontWeight: '800', fontSize: '1.4rem', margin: 0 }}>${product.price}</p>
                   <button 
                     onClick={() => addToCart(product)}
-                    style={{ background: '#ff3e6c', color: '#fff', border: 'none', padding: '0.7rem 1.4rem', borderRadius: '25px', fontWeight: '700', cursor: 'pointer', fontSize: '0.85rem', transition: 'transform 0.2s' }}
+                    style={{ background: '#ff3e6c', color: '#fff', border: 'none', padding: '0.7rem 1.4rem', borderRadius: '25px', fontWeight: '700', cursor: 'pointer', fontSize: '0.85rem' }}
                   >
                     إضافة للسلة
                   </button>
@@ -206,11 +206,11 @@ export default function App() {
         )}
       </section>
 
-      {/* لوحة سلة المشتريات الجانبية الاحترافية */}
+      {/* شاشة سلة التسوق الجانبية المنزلقة (Cart Drawer Side Panel) */}
       <AnimatePresence>
         {isCartOpen && (
           <>
-            {/* غطاء معتم للخلفية عند الفتح */}
+            {/* غطاء الخلفية المعتم الشفاف */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.6 }}
@@ -219,7 +219,7 @@ export default function App() {
               style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: '#000', zIndex: 99 }}
             />
             
-            {/* الـ Drawer الخاص بالسلة منسدل بسلاسة فائقة */}
+            {/* سحب ناعم للوحة السلة الجانبية من اليسار بدعم Framer Motion */}
             <motion.div 
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -230,11 +230,11 @@ export default function App() {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #222', paddingBottom: '1.2rem', marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.6rem', fontWeight: '800', margin: 0 }}>حقيبة التسوق ({totalItems})</h3>
-                  <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: '#666', fontSize: '1.4rem', cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={(e) => e.target.style.color = '#fff'} onMouseLeave={(e) => e.target.style.color = '#666'}>✕</button>
+                  <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: '#666', fontSize: '1.4rem', cursor: 'pointer' }}>✕</button>
                 </div>
 
-                {/* قائمة السلع */}
-                <div style={{ overflowY: 'auto', maxHeight: '62vh', display: 'flex', flexDirection: 'column', gap: '1.2rem', paddingLeft: '5px' }}>
+                {/* استعراض محتويات السلة المضافة */}
+                <div style={{ overflowY: 'auto', maxHeight: '62vh', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                   {cart.length === 0 ? (
                     <p style={{ color: '#555', textAlign: 'center', marginTop: '4rem', fontSize: '1.1rem' }}>حقيبتك فارغة تماماً، تصفح واقنص قطعك المفضلة!</p>
                   ) : (
@@ -245,21 +245,21 @@ export default function App() {
                           <h4 style={{ fontSize: '1.05rem', margin: '0 0 0.4rem 0', fontWeight: '600' }}>{item.name}</h4>
                           <p style={{ color: '#ff3e6c', fontWeight: '800', margin: 0, fontSize: '1.1rem' }}>${item.price}</p>
                           
-                          {/* زيادة وتعديل الأعداد بدقة */}
+                          {/* التحكم بالزيادة والنقصان الفوري */}
                           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.6rem' }}>
                             <button onClick={() => updateQty(item, 'decrease')} style={{ background: '#252525', border: 'none', color: '#fff', width: '26px', height: '26px', borderRadius: '50%', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><Minus size={12} /></button>
                             <span style={{ fontWeight: 'bold' }}>{item.qty}</span>
                             <button onClick={() => updateQty(item, 'increase')} style={{ background: '#252525', border: 'none', color: '#fff', width: '26px', height: '26px', borderRadius: '50%', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><Plus size={12} /></button>
                           </div>
                         </div>
-                        <button onClick={() => removeFromCart(item)} style={{ background: 'none', border: 'none', color: '#333', cursor: 'pointer', padding: '0.5rem', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = '#ff3e6c'} onMouseLeave={(e) => e.currentTarget.style.color = '#333'}><Trash2 size={18} /></button>
+                        <button onClick={() => removeFromCart(item)} style={{ background: 'none', border: 'none', color: '#333', cursor: 'pointer', padding: '0.5rem' }}><Trash2 size={18} /></button>
                       </div>
                     ))
                   )}
                 </div>
               </div>
 
-              {/* قسم الدفع والحساب النهائي */}
+              {/* مجموع الحساب الكلي وزر تأكيد الشراء الفاخر */}
               {cart.length > 0 && (
                 <div style={{ borderTop: '1px solid #222', paddingTop: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem' }}>
