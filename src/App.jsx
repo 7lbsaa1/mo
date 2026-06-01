@@ -3,14 +3,14 @@ import gsap from 'gsap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ArrowLeft, Trash2, Plus, Minus, Search, Check, Star } from 'lucide-react';
 
-// قاعدة بيانات المنتجات الفخمة لمتجر 7LBSAA
+// قاعدة بيانات المنتجات مع روابط لصور ملابس حقيقية وعالية الجودة
 const ALL_PRODUCTS = [
-  { id: 1, name: "Premium Cyber Hoodie", price: 89, category: "Hoodies", rating: 4.9, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500" },
-  { id: 2, name: "Streetwear Cargo Pants", price: 75, category: "Pants", rating: 4.7, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500" },
-  { id: 3, name: "Oversized Anime Tee", price: 45, category: "T-Shirts", rating: 4.8, img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500" },
-  { id: 4, name: "Urban Techwear Jacket", price: 120, category: "Jackets", rating: 5.0, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500" },
-  { id: 5, name: "Retro Graphic Sweatshirt", price: 65, category: "Hoodies", rating: 4.6, img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500" },
-  { id: 6, name: "Minimalist Black Cap", price: 25, category: "Accessories", rating: 4.5, img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500" }
+  { id: 1, name: "Premium Cyber Hoodie", price: 89, category: "Hoodies", rating: 4.9, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600" },
+  { id: 2, name: "Streetwear Cargo Pants", price: 75, category: "Pants", rating: 4.7, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600" },
+  { id: 3, name: "Oversized Anime Tee", price: 45, category: "T-Shirts", rating: 4.8, img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600" },
+  { id: 4, name: "Urban Techwear Jacket", price: 120, category: "Jackets", rating: 5.0, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600" },
+  { id: 5, name: "Retro Graphic Sweatshirt", price: 65, category: "Hoodies", rating: 4.6, img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600" },
+  { id: 6, name: "Minimalist Black Cap", price: 25, category: "Accessories", rating: 4.5, img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600" }
 ];
 
 export default function App() {
@@ -18,17 +18,17 @@ export default function App() {
   const subtitleRef = useRef();
   const btnRef = useRef();
 
-  // إدارة حالات السلة والبحث والفلاتر
+  // إدارات الحالات التفاعلية
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    // حركة دخول سينمائية احترافية عبر محرك GSAP
+    // حركة دخول أنيقة وحادة لعناصر الواجهة عند تحميل الصفحة لأول مرة عبر GSAP
     const tl = gsap.timeline();
     tl.fromTo(titleRef.current, 
-      { opacity: 0, y: 100, skewY: 7 }, 
+      { opacity: 0, y: 100, skewY: 5 }, 
       { opacity: 1, y: 0, skewY: 0, duration: 1.2, ease: "power4.out" }
     );
     tl.fromTo(subtitleRef.current, 
@@ -53,7 +53,7 @@ export default function App() {
     }
   };
 
-  // التحكم بالكميات داخل السلة (زيادة / نقصان)
+  // تعديل كميات السلة
   const updateQty = (product, action) => {
     if (action === 'increase') {
       setCart(cart.map(x => x.id === product.id ? { ...product, qty: product.qty + 1 } : x));
@@ -66,7 +66,6 @@ export default function App() {
     }
   };
 
-  // مسح منتج نهائياً
   const removeFromCart = (product) => {
     setCart(cart.filter(x => x.id !== product.id));
   };
@@ -74,7 +73,7 @@ export default function App() {
   const totalItems = cart.reduce((a, c) => a + c.qty, 0);
   const totalPrice = cart.reduce((a, c) => a + c.price * c.qty, 0);
 
-  // تصفية المنتجات بناءً على البحث والتصنيف الحالي
+  // تصفية المنتجات بناءً على البحث والأزرار
   const filteredProducts = ALL_PRODUCTS.filter(product => {
     const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -84,18 +83,17 @@ export default function App() {
   return (
     <div dir="rtl" style={{ minHeight: '100vh', background: '#0b0b0b', color: '#fff', position: 'relative' }}>
       
-      {/* هيدر زجاجي مثبت بلمسة عصرية (Blur Navbar) */}
+      {/* هيدر شفاف زجاجي (Navbar) */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 8%', position: 'fixed', width: '100%', top: 0, zIndex: 50, background: 'rgba(11, 11, 11, 0.75)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
         <h1 style={{ fontSize: '2.2rem', fontWeight: '900', letterSpacing: '3px', color: '#ff3e6c', margin: 0 }}>7LBSAA</h1>
         
-        {/* زر السلة التفاعلي */}
         <div onClick={() => setIsCartOpen(true)} style={{ position: 'relative', cursor: 'pointer', padding: '5px' }}>
           <ShoppingBag size={26} color="#fff" />
           {totalItems > 0 && (
             <motion.span 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              style={{ position: 'absolute', top: '-2px', right: '-2px', background: '#ff3e6c', borderRadius: '50%', width: '19px', height: '19px', fontSize: '0.7rem', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold', boxShadow: '0 0 10px rgba(255, 62, 108, 0.6)' }}
+              style={{ position: 'absolute', top: '-2px', right: '-2px', background: '#ff3e6c', borderRadius: '50%', width: '19px', height: '19px', fontSize: '0.7rem', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold' }}
             >
               {totalItems}
             </motion.span>
@@ -106,28 +104,28 @@ export default function App() {
       {/* قسم الواجهة الرئيسي (Hero Section) */}
       <section style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 8%', position: 'relative', overflow: 'hidden' }}>
         <div style={{ zIndex: 2, maxWidth: '700px', textAlign: 'right' }}>
-          <h1 ref={titleRef} style={{ fontSize: '5rem', lineHeight: '1.15', fontWeight: '900', marginBottom: '1.5rem', letterSpacing: '-1px' }}>
+          <h1 ref={titleRef} style={{ fontSize: '5rem', lineHeight: '1.15', fontWeight: '900', marginBottom: '1.5rem' }}>
             مستقبل <br/>
             <span style={{ color: 'transparent', WebkitTextStroke: '2px #fff' }}>الأزياء</span> هنا.
           </h1>
-          <p ref={subtitleRef} style={{ fontSize: '1.25rem', color: '#aaa', marginBottom: '2.5rem', lineHeight: '1.8', fontWeight: '300' }}>
-            اكتشف تشكيلتنا الحصرية المصممة لتواكب صيحات الجيل الجديد. قطع فريدة ومبتكرة تعبر عن أسلوبك الخاص وبأعلى دقة تصنيع.
+          <p ref={subtitleRef} style={{ fontSize: '1.25rem', color: '#aaa', marginBottom: '2.5rem', lineHeight: '1.8' }}>
+            اكتشف تشكيلتنا الحصرية بروح الجيل القادم. جودة استثنائية وحركات تفاعلية تمنحك تجربة تسوق فريدة ومثالية.
           </p>
-          <button ref={btnRef} onClick={() => document.getElementById('shop').scrollIntoView({ behavior: 'smooth' })} className="cta-btn" style={{ background: '#ff3e6c', color: '#fff', border: 'none', padding: '1.2rem 3rem', fontSize: '1.1rem', fontWeight: '700', borderRadius: '30px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 4px 15px rgba(255, 62, 108, 0.3)' }}>
+          <button ref={btnRef} onClick={() => document.getElementById('shop').scrollIntoView({ behavior: 'smooth' })} className="cta-btn" style={{ background: '#ff3e6c', color: '#fff', border: 'none', padding: '1.2rem 3rem', fontSize: '1.1rem', fontWeight: '700', borderRadius: '30px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px' }}>
             تصفح المتجر الآن <ArrowLeft size={20} />
           </button>
         </div>
       </section>
 
-      {/* قسم المتجر الرئيسي وفلاتر التحكم */}
+      {/* قسم المتجر وعرض المنتجات التفاعلي */}
       <section id="shop" style={{ padding: '6rem 8%', background: '#0e0e0e', borderTop: '1px solid #161616' }}>
         
-        {/* شريط البحث والفئات */}
+        {/* الفلاتر والبحث */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '4rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
             <h2 style={{ fontSize: '2.6rem', fontWeight: '800', margin: 0 }}>مجموعتنا <span style={{ color: '#ff3e6c' }}>الجديدة</span></h2>
             
-            {/* صندوق البحث الذكي */}
+            {/* صندوق البحث */}
             <div style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
               <input 
                 type="text" 
@@ -140,13 +138,13 @@ export default function App() {
             </div>
           </div>
 
-          {/* أزرار اختيار التصنيفات */}
+          {/* أزرار التصنيفات */}
           <div style={{ display: 'flex', gap: '0.8rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
             {["All", "Hoodies", "Pants", "T-Shirts", "Jackets", "Accessories"].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                style={{ padding: '0.7rem 1.6rem', borderRadius: '25px', border: 'none', cursor: 'pointer', background: selectedCategory === cat ? '#ff3e6c' : '#161616', color: '#fff', fontWeight: '600', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', fontSize: '0.9rem' }}
+                style={{ padding: '0.7rem 1.6rem', borderRadius: '25px', border: 'none', cursor: 'pointer', background: selectedCategory === cat ? '#ff3e6c' : '#161616', color: '#fff', fontWeight: '600', transition: 'all 0.3s ease', fontSize: '0.9rem' }}
               >
                 {cat === "All" ? "عرض الكل" : cat}
               </button>
@@ -154,21 +152,22 @@ export default function App() {
           </div>
         </div>
 
-        {/* شبكة المنتجات الانسيابية المدعومة بالـ Layout Animation */}
-        <motion.div layout style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
+        {/* 🎬 شبكة المنتجات التي تظهر وتتحرك أثناء النزول بالشاشة (Scroll Animation) */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
           <AnimatePresence mode="popLayout">
             {filteredProducts.map((product) => (
               <motion.div 
                 layout
                 key={product.id}
-                initial={{ opacity: 0, scale: 0.92 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.92 }}
-                transition={{ duration: 0.4 }}
+                /* هنا كود حركة التمرير: يبدأ شفاف ويتحرك من أسفل (y: 50)، ويظهر أول ما تلمحه العين بالشاشة */
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
                 style={{ background: '#161616', padding: '1.2rem', borderRadius: '20px', border: '1px solid #222', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
               >
                 <div>
-                  {/* تأثير تكبير الصور الانسيابي عند التمرير بالـ Mouse */}
+                  {/* حركة تكبير وتفاعل الصورة (Zoom on Hover) */}
                   <div style={{ overflow: 'hidden', borderRadius: '14px', height: '350px', marginBottom: '1.2rem', position: 'relative' }}>
                     <motion.img 
                       src={product.img} 
@@ -199,18 +198,17 @@ export default function App() {
               </motion.div>
             ))}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
         {filteredProducts.length === 0 && (
           <p style={{ textAlign: 'center', color: '#666', fontSize: '1.2rem', marginTop: '4rem' }}>عذراً، لم نجد قطعاً تطابق بحثك حالياً.</p>
         )}
       </section>
 
-      {/* شاشة سلة التسوق الجانبية المنزلقة (Cart Drawer Side Panel) */}
+      {/* لوحة السلة الجانبية (Cart Drawer) */}
       <AnimatePresence>
         {isCartOpen && (
           <>
-            {/* غطاء الخلفية المعتم الشفاف */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.6 }}
@@ -219,7 +217,6 @@ export default function App() {
               style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: '#000', zIndex: 99 }}
             />
             
-            {/* سحب ناعم للوحة السلة الجانبية من اليسار بدعم Framer Motion */}
             <motion.div 
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -233,10 +230,9 @@ export default function App() {
                   <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: '#666', fontSize: '1.4rem', cursor: 'pointer' }}>✕</button>
                 </div>
 
-                {/* استعراض محتويات السلة المضافة */}
                 <div style={{ overflowY: 'auto', maxHeight: '62vh', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                   {cart.length === 0 ? (
-                    <p style={{ color: '#555', textAlign: 'center', marginTop: '4rem', fontSize: '1.1rem' }}>حقيبتك فارغة تماماً، تصفح واقنص قطعك المفضلة!</p>
+                    <p style={{ color: '#555', textAlign: 'center', marginTop: '4rem', fontSize: '1.1rem' }}>حقيبتك فارغة، تصفح واقنص قطعك المفضلة!</p>
                   ) : (
                     cart.map(item => (
                       <div key={item.id} style={{ display: 'flex', gap: '1.2rem', background: '#161616', padding: '1rem', borderRadius: '16px', alignItems: 'center', border: '1px solid #222' }}>
@@ -245,7 +241,6 @@ export default function App() {
                           <h4 style={{ fontSize: '1.05rem', margin: '0 0 0.4rem 0', fontWeight: '600' }}>{item.name}</h4>
                           <p style={{ color: '#ff3e6c', fontWeight: '800', margin: 0, fontSize: '1.1rem' }}>${item.price}</p>
                           
-                          {/* التحكم بالزيادة والنقصان الفوري */}
                           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.6rem' }}>
                             <button onClick={() => updateQty(item, 'decrease')} style={{ background: '#252525', border: 'none', color: '#fff', width: '26px', height: '26px', borderRadius: '50%', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><Minus size={12} /></button>
                             <span style={{ fontWeight: 'bold' }}>{item.qty}</span>
@@ -259,15 +254,14 @@ export default function App() {
                 </div>
               </div>
 
-              {/* مجموع الحساب الكلي وزر تأكيد الشراء الفاخر */}
               {cart.length > 0 && (
                 <div style={{ borderTop: '1px solid #222', paddingTop: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem' }}>
                     <span>المجموع الإجمالي:</span>
                     <span style={{ color: '#ff3e6c', fontSize: '1.4rem' }}>${totalPrice}</span>
                   </div>
-                  <button className="cta-btn" style={{ width: '100%', background: '#ff3e6c', color: '#fff', border: 'none', padding: '1.1rem', borderRadius: '30px', fontSize: '1.1rem', fontWeight: '700', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', boxShadow: '0 4px 15px rgba(255, 62, 108, 0.2)' }}>
-                    الانتقال لتأكيد الدفع <Check size={20} />
+                  <button className="cta-btn" style={{ width: '100%', background: '#ff3e6c', color: '#fff', border: 'none', padding: '1.1rem', borderRadius: '30px', fontSize: '1.1rem', fontWeight: '700', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+                    الذهاب لتأكيد الدفع <Check size={20} />
                   </button>
                 </div>
               )}
