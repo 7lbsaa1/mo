@@ -4,48 +4,68 @@ import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ArrowLeft, Trash2, Plus, Minus, Search, Check, Star } from 'lucide-react';
 
-// 3D Component: مكون مجسم النيون التفاعلي يدور بالماوس
+// 3D Component: صندوق عرض ملابس 7LBSAA المجسم التفاعلي
 const NeonCube3D = () => {
   const mountRef = useRef(null);
 
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // إعداد المسرح والكاميرا
+    // 1. إعداد المشهد والكاميرا
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-    camera.position.z = 2.5;
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+    camera.position.z = 2.2;
 
-    // المحرك الشفاف
+    // 2. المحرك الشفاف لـ WebGL
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(280, 280);
+    renderer.setSize(300, 300);
     mountRef.current.appendChild(renderer.domElement);
 
-    // صنع مكعب خطوط النيون لـ 7LBSAA
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff3e6c, wireframe: true });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    // 3. تحميل الصور ولصقها على أوجه المكعب الستة
+    const textureLoader = new THREE.TextureLoader();
+    
+    // يمكنك تغيير هذه الروابط الستة في أي وقت بروابط صور ملابسك الخاصة
+    const materials = [
+      new THREE.MeshBasicMaterial({ map: textureLoader.load('https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400') }), // الوجه 1
+      new THREE.MeshBasicMaterial({ map: textureLoader.load('https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400') }), // الوجه 2
+      new THREE.MeshBasicMaterial({ map: textureLoader.load('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400') }), // الوجه 3
+      new THREE.MeshBasicMaterial({ map: textureLoader.load('https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400') }), // الوجه 4
+      new THREE.MeshBasicMaterial({ map: textureLoader.load('https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400') }), // الوجه 5
+      new THREE.MeshBasicMaterial({ map: textureLoader.load('https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400') }), // الوجه 6
+    ];
 
-    // تتبع حركة ماوس المستخدم للتفاعل مع المكعب
+    // 4. إنشاء هيكل المكعب وإضافة الأوجه المكسوة بالصور إليه
+    const geometry = new THREE.BoxGeometry(1.1, 1.1, 1.1);
+    const clothingCube = new THREE.Mesh(geometry, materials);
+    scene.add(clothingCube);
+
+    // 5. متغيرات لتخزين حركة الماوس لعمل تفاعل ناعم
+    let targetX = 0;
+    let targetY = 0;
+
     const handleMouseMove = (event) => {
       const { innerWidth, innerHeight } = window;
-      const x = (event.clientX / innerWidth) - 0.5;
-      const y = (event.clientY / innerHeight) - 0.5;
-      cube.rotation.x = y * 2;
-      cube.rotation.y = x * 2;
+      targetX = (event.clientX / innerWidth) - 0.5;
+      targetY = (event.clientY / innerHeight) - 0.5;
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    // حلقة التحريك المستمر الخفيف
+    // 6. حلقة الرسوم المتحركة والتدوير التلقائي مع دمج تفاعل الماوس
     const animate = () => {
       requestAnimationFrame(animate);
-      cube.rotation.x += 0.005;
-      cube.rotation.y += 0.005;
+      
+      // دوران تلقائي مستمر هادئ ليظهر كل الملابس للعميل
+      clothingCube.rotation.y += 0.003;
+      
+      // التفاعل المرن والانسيابي عند حركة ماوس المستخدم
+      clothingCube.rotation.y += (targetX * 1.5 - clothingCube.rotation.y) * 0.05;
+      clothingCube.rotation.x += (targetY * 1.5 - clothingCube.rotation.x) * 0.05;
+
       renderer.render(scene, camera);
     };
     animate();
 
+    // تنظيف الذاكرة وفك الأحداث عند الخروج من الصفحة
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       if (mountRef.current && renderer.domElement) {
@@ -54,10 +74,10 @@ const NeonCube3D = () => {
     };
   }, []);
 
-  return <div ref={mountRef} style={{ width: '280px', height: '280px', margin: '0 auto' }} />;
+  return <div ref={mountRef} style={{ width: '300px', height: '300px', margin: '0 auto', cursor: 'grab' }} />;
 };
 
-// قاعدة بيانات الملابس الفاخرة
+// قاعدة بيانات الملابس المعروضة بالأسفل في المتجر
 const ALL_PRODUCTS = [
   { id: 1, name: "Premium Cyber Hoodie", price: 89, category: "Hoodies", rating: 4.9, img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600" },
   { id: 2, name: "Streetwear Cargo Pants", price: 75, category: "Pants", rating: 4.7, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600" },
@@ -77,6 +97,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  // تأثيرات GSAP عند فتح الموقع لأول مرة (Hero Animations)
   useEffect(() => {
     const tl = gsap.timeline();
     tl.fromTo(titleRef.current, { opacity: 0, y: 80, skewY: 4 }, { opacity: 1, y: 0, skewY: 0, duration: 1, ease: "power4.out" });
@@ -84,6 +105,7 @@ export default function App() {
     tl.fromTo(btnRef.current, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.4)" }, "-=0.2");
   }, []);
 
+  // دوال التحكم في عربة التسوق (السلة)
   const addToCart = (product) => {
     const exist = cart.find(x => x.id === product.id);
     if (exist) {
@@ -112,6 +134,7 @@ export default function App() {
   const totalItems = cart.reduce((a, c) => a + c.qty, 0);
   const totalPrice = cart.reduce((a, c) => a + c.price * c.qty, 0);
 
+  // تصفية الملابس بناءً على الفئة أو كلمة البحث
   const filteredProducts = ALL_PRODUCTS.filter(product => {
     const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -119,10 +142,10 @@ export default function App() {
   });
 
   return (
-    <div dir="rtl" style={{ minHeight: '100vh', background: '#0b0b0b', color: '#fff', position: 'relative', overflowX: 'hidden' }}>
+    <div dir="rtl" style={{ minHeight: '100vh', background: '#0b0b0b', color: '#fff', position: 'relative', overflowX: 'hidden', fontFamily: 'sans-serif' }}>
       
-      {/* شريط التنقل الزجاجي */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 8%', position: 'fixed', width: '100%', top: 0, zIndex: 50, background: 'rgba(11, 11, 11, 0.75)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
+      {/* شريط التنقل العلوي الزجاجي (Navbar) */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 8%', position: 'fixed', width: '100%', top: 0, zIndex: 50, background: 'rgba(11, 11, 11, 0.75)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', boxSizing: 'border-box' }}>
         <h1 style={{ fontSize: '2.2rem', fontWeight: '900', letterSpacing: '3px', color: '#ff3e6c', margin: 0 }}>7LBSAA</h1>
         
         <div onClick={() => setIsCartOpen(true)} style={{ position: 'relative', cursor: 'pointer', padding: '5px' }}>
@@ -135,30 +158,30 @@ export default function App() {
         </div>
       </nav>
 
-      {/* قسم الهيرو ومجسم الـ 3D التفاعلي الجديد */}
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 8%', flexWrap: 'wrap', paddingTop: '80px', gap: '2rem' }}>
+      {/* قسم الهيرو الرئيسي ومكعب الـ 3D المستحدث */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 8%', flexWrap: 'wrap', paddingTop: '80px', gap: '2rem', boxSizing: 'border-box' }}>
         <div style={{ maxWidth: '600px', textAlign: 'right', flex: '1 1 400px' }}>
-          <h1 ref={titleRef} style={{ fontSize: '4.5rem', lineHeight: '1.2', fontWeight: '900', marginBottom: '1.5rem' }}>
+          <h1 ref={titleRef} style={{ fontSize: '4.5rem', lineHeight: '1.2', fontWeight: '900', marginBottom: '1.5rem', margin: 0 }}>
             مستقبل <br/>
             <span style={{ color: 'transparent', WebkitTextStroke: '2px #fff' }}>الأزياء</span> هنا.
           </h1>
           <p ref={subtitleRef} style={{ fontSize: '1.2rem', color: '#aaa', marginBottom: '2.5rem', lineHeight: '1.8' }}>
-            اكتشف تشكيلتنا الحصرية بروح الجيل القادم وتصاميم النيون العصرية. حركات تفاعلية تمنحك تجربة غامرة وفريدة.
+            اكتشف تشكيلتنا الحصرية بروح الجيل القادم وتصاميم النيون العصرية. حركات تفاعلية وصندوق عرض ثلاثي أبعاد يمنحك تجربة غامرة وفريدة.
           </p>
-          <button ref={btnRef} onClick={() => document.getElementById('shop').scrollIntoView({ behavior: 'smooth' })} className="cta-btn" style={{ background: '#ff3e6c', color: '#fff', border: 'none', padding: '1.1rem 2.8rem', fontSize: '1.1rem', fontWeight: '700', borderRadius: '30px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button ref={btnRef} onClick={() => document.getElementById('shop').scrollIntoView({ behavior: 'smooth' })} style={{ background: '#ff3e6c', color: '#fff', border: 'none', padding: '1.1rem 2.8rem', fontSize: '1.1rem', fontWeight: '700', borderRadius: '30px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', transition: 'transform 0.2s' }}>
             تصفح المتجر الآن <ArrowLeft size={20} />
           </button>
         </div>
 
-        {/* دمج شاشة الـ 3D بجانب النص لتخطف أنظار العميل */}
+        {/* عرض صندوق الملابس المجسم هنا */}
         <div style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <NeonCube3D />
         </div>
       </section>
 
-      {/* قسم عرض المنتجات التفاعلي */}
+      {/* قسم المتجر وعرض كروت الملابس (Shop Section) */}
       <section id="shop" style={{ padding: '6rem 8%', background: '#0e0e0e', borderTop: '1px solid #161616' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '4rem' }}>
+        <div style={{ display: 'flex', middle: 'center', flexDirection: 'column', gap: '2rem', marginBottom: '4rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
             <h2 style={{ fontSize: '2.4rem', fontWeight: '800', margin: 0 }}>مجموعتنا <span style={{ color: '#ff3e6c' }}>الجديدة</span></h2>
             
@@ -168,12 +191,13 @@ export default function App() {
                 placeholder="ابحث عما يناسب أسلوبك..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ width: '100%', padding: '0.9rem 1.2rem', paddingRight: '2.8rem', borderRadius: '30px', background: '#161616', border: '1px solid #252525', color: '#fff', outline: 'none' }}
+                style={{ width: '100%', padding: '0.9rem 1.2rem', paddingRight: '2.8rem', borderRadius: '30px', background: '#161616', border: '1px solid #252525', color: '#fff', outline: 'none', boxSizing: 'border-box' }}
               />
               <Search size={18} color="#666" style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)' }} />
             </div>
           </div>
 
+          {/* فلاتر تصنيف الملابس الـ زجاجية */}
           <div style={{ display: 'flex', gap: '0.8rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
             {["All", "Hoodies", "Pants", "T-Shirts", "Jackets", "Accessories"].map((cat) => (
               <button
@@ -187,7 +211,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* تأثير حركات التمرير (Scroll Animations) لكروت الملابس */}
+        {/* شبكة عرض الملابس مع حركات الـ Scroll الظاهرية من Framer Motion */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem' }}>
           <AnimatePresence mode="popLayout">
             {filteredProducts.map((product) => (
@@ -231,15 +255,17 @@ export default function App() {
         </div>
       </section>
 
-      {/* لوحة السلة الجانبية */}
+      {/* شاشة السلة الجانبية (Slide-out Cart Panel) */}
       <AnimatePresence>
         {isCartOpen && (
           <>
+            {/* الغطاء الشفاف الخلفي */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.6 }} exit={{ opacity: 0 }} onClick={() => setIsCartOpen(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: '#000', zIndex: 99 }} />
             
+            {/* اللوحة الجانبية */}
             <motion.div 
               initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'tween', duration: 0.35 }}
-              style={{ position: 'fixed', top: 0, left: 0, width: '100%', maxWidth: '440px', height: '100vh', background: '#111', zIndex: 100, boxShadow: '10px 0 30px rgba(0,0,0,0.6)', padding: '2.5rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textAlign: 'right' }}
+              style={{ position: 'fixed', top: 0, left: 0, width: '100%', maxWidth: '440px', height: '100vh', background: '#111', zIndex: 100, boxShadow: '10px 0 30px rgba(0,0,0,0.6)', padding: '2.5rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textAlign: 'right', boxSizing: 'border-box' }}
             >
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #222', paddingBottom: '1.2rem', marginBottom: '1.5rem' }}>
@@ -247,6 +273,7 @@ export default function App() {
                   <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: '#666', fontSize: '1.4rem', cursor: 'pointer' }}>✕</button>
                 </div>
 
+                {/* قائمة السلع المضافة للسلة */}
                 <div style={{ overflowY: 'auto', maxHeight: '62vh', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                   {cart.length === 0 ? (
                     <p style={{ color: '#555', textAlign: 'center', marginTop: '4rem' }}>حقيبتك فارغة، تصفح واقنص قطعك المفضلة!</p>
@@ -271,6 +298,7 @@ export default function App() {
                 </div>
               </div>
 
+              {/* مجموع الحساب النهائي وزر الدفع */}
               {cart.length > 0 && (
                 <div style={{ borderTop: '1px solid #222', paddingTop: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', fontWeight: '800', marginBottom: '1.5rem' }}>
