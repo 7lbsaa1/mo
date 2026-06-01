@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -31,4 +30,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
-          branch: gh-pages # سيرفع الملفات الجاهزة في فرع جديد تلقائياً
+          branch: gh-pages
