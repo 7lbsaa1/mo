@@ -1,19 +1,26 @@
+/* استدعاء خطوط جوجل المتناسقة جداً للعربية والإنجليزية */
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Poppins:wght@300;400;600;800&display=swap');
 
+/* تصغير وتصفير المسافات الافتراضية مع تنعيم الخطوط */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', 'Cairo', sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* خلفية المتجر العميقة الداكنة */
 body {
   background-color: #0b0b0b;
   color: #ffffff;
   overflow-x: hidden;
 }
 
-/* تخصيص شريط التمرير (Scrollbar) بتصميم عصري */
+/* ==========================================================================
+   ✨ تأثيرات الجمال وشريط التمرير (Scrollbar Aesthetic)
+   ========================================================================== */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -21,18 +28,105 @@ body {
   background: #0b0b0b;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ff3e6c;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #ff3e6c, #ff7b00);
+  border-radius: 20px;
 }
 
-/* حركة نبض خفيفة للزرار */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+/* تظليل النصوص عند تحديدها بالماوس */
+::selection {
+  background-color: #ff3e6c;
+  color: #fff;
 }
 
-.cta-btn:hover {
-  animation: pulse 1s infinite;
-  box-shadow: 0 0 20px rgba(25ff, 62, 108, 0.6);
+/* ==========================================================================
+   🚀 أنيميشن وحركات تفاعلية (Micro-Interactions & Animations)
+   ========================================================================== */
+
+/* 1. حركة نبض وتوهج النيون لزر "تسوق الآن" */
+@keyframes neonPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 62, 108, 0.5), 0 0 10px rgba(255, 62, 108, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 62, 108, 0.8), 0 0 30px rgba(255, 62, 108, 0.5);
+    transform: translateY(-2px);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 62, 108, 0.5), 0 0 10px rgba(255, 62, 108, 0.3);
+  }
+}
+
+/* تطبيق الحركة على زر الـ CTA عند الوقوف عليه */
+style button, .cta-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+style button:hover, .cta-btn:hover {
+  animation: neonPulse 1.5s infinite alternate;
+  letter-spacing: 1px;
+}
+
+/* 2. تأثير اللمعان السريع (Shine Effect) يمر فوق الكروت والأزرار بشكل جمالي */
+style button::after, .cta-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 30%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.13);
+  transform: rotate(30deg);
+  transition: all 0.6s ease;
+}
+
+style button:hover::after, .cta-btn:hover::after {
+  left: 130%;
+}
+
+/* 3. حركة انسيابية لكروت المنتجات عند التمرير بالماوس */
+div[style*="background: rgb(22, 22, 22)"], 
+div[style*="background: #161616"] {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+}
+
+div[style*="background: rgb(22, 22, 22)"]:hover, 
+div[style*="background: #161616"]:hover {
+  border-color: #ff3e6c !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 62, 108, 0.1);
+}
+
+/* 4. إضاءة خافتة متحركة في الخلفية لتملأ الفراغ البصري (Glow Background) */
+body::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: -20%;
+  width: 60vw;
+  height: 60vh;
+  background: radial-gradient(circle, rgba(255, 62, 108, 0.08) 0%, rgba(0,0,0,0) 70%);
+  z-index: -1;
+  pointer-events: none;
+  animation: floatGlow 8s infinite alternate ease-in-out;
+}
+
+@keyframes floatGlow {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(100px, 50px); }
+}
+
+/* 5. تخصيص أزرار الأقسام (Categories) بحركة تبديل ناعمة */
+button[style*="background: rgb(22, 22, 22)"],
+button[style*="background: #161616"] {
+  border: 1px solid #222 !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+button[style*="background: rgb(22, 22, 22)"]:hover,
+button[style*="background: #161616"]:hover {
+  background: #222 !important;
+  border-color: #ff3e6c !important;
+  color: #ff3e6c !important;
 }
