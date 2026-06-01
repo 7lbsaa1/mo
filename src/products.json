@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Cyber Hoodie",
+    "price": 89,
+    "category": "Hoodies",
+    "sizes": ["S", "M", "L", "XL"],
+    "inStock": true,
+    "img": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600"
+  },
+  {
+    "id": 2,
+    "name": "Urban Techwear Jacket",
+    "price": 120,
+    "category": "Jackets",
+    "sizes": ["M", "L", "XXL"],
+    "inStock": true,
+    "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600"
+  }
+]
